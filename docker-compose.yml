@@ -1,0 +1,40 @@
+services:
+  db-inventory:
+    container_name: db-inventory
+    image: postgres:latest
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: lfs
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: inventory
+    ports:
+      - 5431:5431
+    expose:
+      - 5431
+    command: -p 5431
+  db-order:
+    container_name: db-order
+    image: mysql:latest
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: order
+      MYSQL_USER: lfs
+      MYSQL_PASSWORD: root
+    ports:
+      - 3306:3306
+    expose:
+      - 3306
+  db-product:
+    container_name: db-product
+    image: postgres:latest
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: lfs
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: product
+    ports:
+      - 5432:5432
+    expose:
+      - 5432
+    command: -p 5432
