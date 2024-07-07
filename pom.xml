@@ -10,6 +10,7 @@
 	<groupId>com.lfs</groupId>
 	<artifactId>microservices</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+	<packaging>pom</packaging>
 	<name>microservices</name>
 	<description>Demo project for Spring Boot</description>
 	<url/>
