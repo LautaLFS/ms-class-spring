@@ -6,12 +6,11 @@
 		<groupId>com.lfs</groupId>
 		<artifactId>microservices</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
-		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<artifactId>order-ms</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>order-ms</name>
-	<description>Order services</description>
+	<description>Order service</description>
 	<url/>
 	<licenses>
 		<license/>
