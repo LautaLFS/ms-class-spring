@@ -1,8 +1,6 @@
 package com.lfs.order_ms.services;
 
-import com.lfs.order_ms.model.dtos.BaseResponse;
-import com.lfs.order_ms.model.dtos.OrderItemsRequest;
-import com.lfs.order_ms.model.dtos.OrderRequest;
+import com.lfs.order_ms.model.dtos.*;
 import com.lfs.order_ms.model.entities.Order;
 import com.lfs.order_ms.model.entities.OrderItems;
 import com.lfs.order_ms.repositories.OrderRepository;
@@ -30,7 +28,7 @@ public class OrderService {
                 .retrieve()
                 .bodyToMono(BaseResponse.class)
                 .block();
-        if (result != null && result.hasErrors()) {
+        if (result != null && !result.hasErrors()) {
             Order order = new Order();
             order.setOrderNumber(UUID.randomUUID().toString());
             order.setOrderItems(orderRequest.getOrderItems().stream().map(orderItemsRequest -> mapOrderItemsRequestToOrderItems(orderItemsRequest, order))
@@ -51,12 +49,16 @@ public class OrderService {
                 .build();
     }
 
-    public List<OrderRequest> getAllOrder() {
+    public List<OrderResponse> getAllOrder() {
         var orders = orderRepository.findAll();
-        return orders.stream().map(this::mapOrderToOrderRequest).toList();
+        return orders.stream().map(this::mapOrderToOrderResponse).toList();
     }
 
-    private OrderRequest mapOrderToOrderRequest(Order order) {
-        return null;
+    private OrderResponse mapOrderToOrderResponse(Order order) {
+        return new OrderResponse(order.getId(), order.getOrderNumber(), order.getOrderItems().stream().map(this::mapToOrderItemsResponse).toList());
+    }
+
+    private OrderItemsResponse mapToOrderItemsResponse(OrderItems orderItems) {
+        return new OrderItemsResponse(orderItems.getId(), orderItems.getSku(), orderItems.getPrice(), orderItems.getQuantity());
     }
 }
