@@ -1,6 +1,7 @@
 package com.lfs.order_ms.controllers;
 
 import com.lfs.order_ms.model.dtos.OrderRequest;
+import com.lfs.order_ms.model.dtos.OrderResponse;
 import com.lfs.order_ms.services.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -23,7 +24,7 @@ public class OrderController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public List<OrderRequest> getAllOrder(){
+    public List<OrderResponse> getAllOrder(){
         return this.orderService.getAllOrder();
     }
 }
