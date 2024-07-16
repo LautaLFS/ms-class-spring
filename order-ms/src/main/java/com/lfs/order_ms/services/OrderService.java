@@ -23,7 +23,7 @@ public class OrderService {
 
         BaseResponse result = this.webClientBuilder.build()
                 .post()
-                .uri("http://localhost:8081/api/inventory/in-stock")
+                .uri("lb://inventory-ms/api/inventory/in-stock")
                 .bodyValue(orderRequest.getOrderItems())
                 .retrieve()
                 .bodyToMono(BaseResponse.class)
