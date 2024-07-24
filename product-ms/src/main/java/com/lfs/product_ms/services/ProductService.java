@@ -32,10 +32,10 @@ public class ProductService {
 
     public List<ProductResponse> getAllProducts(){
         var products = productRepository.findAll();
-        return products.stream().map(this::matToProductResponse).toList();
+        return products.stream().map(this::mapToProductResponse).toList();
     }
 
-    private ProductResponse matToProductResponse(Product product) {
+    private ProductResponse mapToProductResponse(Product product) {
         return ProductResponse.builder()
                 .sku(product.getSku())
                 .name(product.getName())
