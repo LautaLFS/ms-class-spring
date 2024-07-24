@@ -19,7 +19,7 @@ public class OrderService {
 
     private final WebClient.Builder webClientBuilder;
     private final OrderRepository orderRepository;
-    public void placeOrder(OrderRequest orderRequest) {
+    public OrderResponse placeOrder(OrderRequest orderRequest) {
 
         BaseResponse result = this.webClientBuilder.build()
                 .post()
@@ -33,7 +33,8 @@ public class OrderService {
             order.setOrderNumber(UUID.randomUUID().toString());
             order.setOrderItems(orderRequest.getOrderItems().stream().map(orderItemsRequest -> mapOrderItemsRequestToOrderItems(orderItemsRequest, order))
                     .toList());
-            this.orderRepository.save(order);
+            var savedOrder = this.orderRepository.save(order);
+            return mapOrderToOrderResponse(savedOrder);
         } else {
             throw new IllegalStateException("Invalid order");
         }
