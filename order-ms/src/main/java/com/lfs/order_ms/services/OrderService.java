@@ -1,11 +1,15 @@
 package com.lfs.order_ms.services;
 
+import com.lfs.order_ms.events.OrderEvent;
 import com.lfs.order_ms.model.dtos.*;
 import com.lfs.order_ms.model.entities.Order;
 import com.lfs.order_ms.model.entities.OrderItems;
+import com.lfs.order_ms.model.enums.OrderStatus;
 import com.lfs.order_ms.repositories.OrderRepository;
+import com.lfs.order_ms.utils.JsonUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -19,7 +23,8 @@ public class OrderService {
 
     private final WebClient.Builder webClientBuilder;
     private final OrderRepository orderRepository;
-    public void placeOrder(OrderRequest orderRequest) {
+    private final KafkaTemplate<String, String> kafkaTemplate;
+    public OrderResponse placeOrder(OrderRequest orderRequest) {
 
         BaseResponse result = this.webClientBuilder.build()
                 .post()
@@ -33,7 +38,11 @@ public class OrderService {
             order.setOrderNumber(UUID.randomUUID().toString());
             order.setOrderItems(orderRequest.getOrderItems().stream().map(orderItemsRequest -> mapOrderItemsRequestToOrderItems(orderItemsRequest, order))
                     .toList());
-            this.orderRepository.save(order);
+            var savedOrder = this.orderRepository.save(order);
+            this.kafkaTemplate.send("orders-topic", JsonUtils.toJson(
+               new OrderEvent(savedOrder.getOrderNumber(), savedOrder.getOrderItems().size(), OrderStatus.PLACED)
+            ));
+            return mapOrderToOrderResponse(savedOrder);
         } else {
             throw new IllegalStateException("Invalid order");
         }
