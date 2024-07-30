@@ -1,8 +1,4 @@
 package com.lfs.product_ms.config;
-
-import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.logging.Log;
-import org.slf4j.Logger;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.converter.Converter;
